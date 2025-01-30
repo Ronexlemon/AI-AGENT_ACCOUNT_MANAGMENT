@@ -9,7 +9,7 @@ HEADERS = {
 }
 
 
-def fetch_price_history(token_id ="ethereum",currency="usd", days=7):
+def fetch_price_history(token_id ="dogecoin",currency="usd", days=30):
     url = f"{COINGECKO_API}/coins/{token_id}/market_chart?vs_currency={currency}&days={days}"
     params = {"vs_currency": currency, "days": days}
     response = requests.get(url, headers=HEADERS, params=params)
@@ -24,4 +24,4 @@ def fetch_price_history(token_id ="ethereum",currency="usd", days=7):
         return None
      
 
-print(fetch_priceHistory())
+print(fetch_price_history())
