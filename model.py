@@ -237,7 +237,7 @@ def train_lstm():
     loss_fn = nn.MSELoss()
 
     # Train the model
-    for epoch in range(100):
+    for epoch in range(400):
         model.train()  # Ensure the model is in training mode
         optimizer.zero_grad()  # Zero the gradients
         output = model(X)  # Forward pass
@@ -247,6 +247,6 @@ def train_lstm():
 
         # Print the loss for monitoring
         if epoch % 10 == 0:  # Print loss every 10 epochs
-            print(f"Epoch [{epoch+1}/100], Loss: {loss.item():.4f}")
+            print(f"Epoch [{epoch+1}/400], Loss: {loss.item():.4f}")
 
     return model, scaler
