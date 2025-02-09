@@ -5,10 +5,12 @@ from swap import transferToken
 import numpy as np
 import pandas as pd
 import torch
+from save import save_model
 
 VOLATILITY_THRESHOLD = -0.05  # Swap if price change >5%
 
 model, scaler = train_lstm()
+#save_model(model, scaler)
 
 def check_market_and_swap():
     data = fetch_price_history()
@@ -33,7 +35,7 @@ def check_market_and_swap():
     if predicted_volatility < VOLATILITY_THRESHOLD:
         print("Market is volatile, swapping to stablecoin.")
        # swap_tokens(0.1)  # Swap 0.1 ETH worth of token to USDC
-        txhash,receipt = transferToken("0x65E28C9C4Ef1a756d8df1c507b7A84eFcF606fd4","Replace with your private key")
+        txhash,receipt = transferToken("0x65E28C9C4Ef1a756d8df1c507b7A84eFcF606fd4","private_key")
         print("Transaction hash:", txhash ,"And Receipt",receipt)
     else:
         print("Market is stable, no swap needed.")

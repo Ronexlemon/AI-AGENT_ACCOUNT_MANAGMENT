@@ -1,16 +1,16 @@
 from web3 import Web3,AsyncWeb3,contract
-from constants import celoRpc,cusdAddress
+from constants import celoRpc,cusdAddress,daiAddress,sepoliaRPC
 from abi import erc20_abi
-provider = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider(celoRpc))
-we3 = Web3(Web3.HTTPProvider(celoRpc))
+provider = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider(sepoliaRPC))
+we3 = Web3(Web3.HTTPProvider(sepoliaRPC))
 
 def get_Signer(private_key):
   return we3.eth.account.from_key(private_key)
 
 
-def get_contract(private_key=None):
+def get_contract(tokenAddress,private_key=None):
     """Returns a contract instance with a signer if private_key is provided."""
-    contract = we3.eth.contract(address=provider.to_checksum_address(cusdAddress), abi=erc20_abi)
+    contract = we3.eth.contract(address=provider.to_checksum_address(tokenAddress), abi=erc20_abi)
     
     if private_key:
         signer = get_Signer(private_key)
