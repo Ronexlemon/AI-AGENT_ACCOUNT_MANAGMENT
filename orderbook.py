@@ -18,6 +18,7 @@ from constants import celoRpc,cusdAddress,sepoliaRPC,daiAddress
 from eth_typing.evm import ChecksumAddress
 from abi import erc20_abi
 from swap import get_contract
+from account import get_user_Balance
 #provider = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider(sepoliaRPC))
 
 we3 = Web3(Web3.HTTPProvider(sepoliaRPC))

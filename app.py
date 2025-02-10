@@ -141,7 +141,7 @@ def process_transactions():
     while True:
         if transaction_queue:
             try:
-                transaction = transaction_queue.pop(0)  # Get next transaction
+                transaction = transaction_queue[0]  # Get next transaction
                 print(f"Processing transaction: {transaction}")
 
                 private_key = transaction["private_key"]
