@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +26,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html>
+      <body>
+        <div className="min-h-screen  bg-gradient-to-b bg-[#000A22]">
+          <Head>
+            <title>VolaAI - Token Volatility AI Model</title>
+          </Head>
+
+          <Header />
+
+          {children}
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+          <Footer />
+        </div>
+        </div>
       </body>
     </html>
   );
