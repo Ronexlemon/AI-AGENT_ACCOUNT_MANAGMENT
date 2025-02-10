@@ -106,6 +106,12 @@ async def SwapTokens(private_key,amountt,sell_token,buy_token):
       #amountt = Web3.to_wei(4, 'ether')
       print("The amount in wei is",amountt)
       print("Approving .....")
+      #check user balance to see it more than the sell token
+      user_bal = get_user_Balance(user_Address=localAccount.address,tokenAddress=to_checksum_address(sell_token))
+      #if user bal is less than the amountt don't continue with the rest of the code
+      if user_bal < amountt:
+           print("You don't have enough tokens to swap")
+           return           
       receipt = await approveTx(amount=amountt,private_key=private_key,tokenAddress=sell_token)
       swaptx = await swap_tokens(amount=str(amountt),account=localAccount,chain=Chain.SEPOLIA,sell_token=to_checksum_address(sell_token),buy_token=to_checksum_address(buy_token))  #0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14   ,DAI 0xB4F1737Af37711e9A5890D9510c9bB60e170CB0D
       print(swaptx)
