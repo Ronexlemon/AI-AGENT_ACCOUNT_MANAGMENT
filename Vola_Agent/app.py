@@ -14,6 +14,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 app = Flask(__name__)
+running_flag = False
 # ----------------- LSTM MODEL SETUP ----------------- #
 class LSTMModel(nn.Module):
     def __init__(self, input_size=1, hidden_size=50, output_size=1):
@@ -66,7 +67,8 @@ transaction_receipts = {}
 
 def update_predictions():
     """Continuously update LSTM model predictions."""
-    while True:
+    global running_flag
+    while running_flag:
         try:
             #price_history = [100, 102, 104, 103, 105, 107, 108, 110, 112, 115]
             data = fetch_price_history()
@@ -135,10 +137,17 @@ def update_predictions():
 #                 print(f"Transaction processing error: {str(e)}")
 
 #         time.sleep(5)  # Wait before checking for new transactions
+def stop_tasks():
+    """Stops all background tasks after the specified duration."""
+    global running_flag
+    running_flag = False
+    print("Background tasks stopped!")
 
 def process_transactions():
     """Continuously process transactions in a loop."""
-    while True:
+    global running_flag
+
+    while running_flag:
         if transaction_queue:
             try:
                 transaction = transaction_queue[0]  # Get next transaction
@@ -187,23 +196,41 @@ def process_transactions():
         time.sleep(5)  # Wait before checking for new transactions
 
 # Start background threads
-threading.Thread(target=update_predictions, daemon=True).start()
-threading.Thread(target=process_transactions, daemon=True).start()
+# threading.Thread(target=update_predictions, daemon=True).start()
+# threading.Thread(target=process_transactions, daemon=True).start()
 
 
 # ----------------- API ROUTES ----------------- #
 
 @app.route('/add_transaction', methods=['POST'])
 def add_transaction():
+    "SET GLOBAL DURATION"
+    global running_flag
     """API to add a new transaction to the queue."""
+
     try:
         data = request.get_json()
         required_fields = ["private_key", "amount", "buy_token", "sell_token"]
+        duration = data.get("duration")  # Expecting duration in minutes
+
         if not all(field in data for field in required_fields):
             return jsonify({"error": "Missing required fields"}), 400
+        if not duration or not isinstance(duration, (int, float)) or duration <= 0:
+            return jsonify({"error": "Invalid duration. Provide a positive number in minutes."}), 400
 
         transaction_queue.append(data)  # Add to queue
-        return jsonify({"message": "Transaction added successfully!"})
+        # Start background tasks if not already running
+        if not running_flag:
+            running_flag = True
+            threading.Thread(target=update_predictions, daemon=True).start()
+            threading.Thread(target=process_transactions, daemon=True).start()
+
+            # Schedule stopping of tasks after duration
+            threading.Timer(duration * 60, stop_tasks).start()
+
+        return jsonify({"message": "Transaction added successfully and tasks started!"})
+
+        
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

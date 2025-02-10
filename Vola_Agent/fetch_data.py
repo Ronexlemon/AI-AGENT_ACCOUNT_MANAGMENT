@@ -24,4 +24,4 @@ def fetch_price_history(token_id ="vechain",currency="usd", days=7):
         return None
      
 
-print(fetch_price_history())
+#print(fetch_price_history())
