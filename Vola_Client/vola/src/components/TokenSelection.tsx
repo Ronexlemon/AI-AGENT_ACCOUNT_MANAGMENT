@@ -1,7 +1,8 @@
-import { Settings2 } from "lucide-react";
+"use client"
 import TokenCard from "./ui/TokenCard";
 import PriceRangeInput from "./ui/PriceRangeInput";
 import DurationSelector from "./ui/DurationSelector";
+import VolatilityParams from "./VolatilityParams"; 
 
 export default function TokenSelection() {
   return (
@@ -11,10 +12,7 @@ export default function TokenSelection() {
         <span className="text-[#A1A5C3] text-sm">
           Select a stable token and a utility token
         </span>
-        <div className="flex items-center space-x-2 text-[#5E6AD2] cursor-pointer">
-          <Settings2 size={16} />
-          <span className="text-sm">Set volatility parameters</span>
-        </div>
+        <VolatilityParams /> 
       </div>
 
       {/* Token Selection */}
