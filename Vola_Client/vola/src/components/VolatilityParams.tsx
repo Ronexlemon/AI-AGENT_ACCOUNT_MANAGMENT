@@ -15,16 +15,24 @@ export default function VolatilityParams() {
       {/* Button to open the volatility settings */}
       <button
         className="flex items-center gap-2 text-trade-accent"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen(true)}
       >
         <Settings2 size={18} />
         <span>Volatility: {volatility}%</span>
         <ChevronDown size={18} />
       </button>
 
+      {/* Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsOpen(false)} // Clicking outside closes the modal
+        ></div>
+      )}
+
       {/* Input for setting volatility percentage */}
       {isOpen && (
-        <div className="absolute left-0 mt-2 bg-[#0D0F1A] p-3 rounded-lg border border-[#5E6AD2] shadow-lg flex items-center gap-2">
+        <div className="absolute left-0 mt-2 bg-[#0D0F1A] p-3 rounded-lg border border-[#5E6AD2] shadow-lg flex items-center gap-2 z-50">
           <input
             type="number"
             value={volatility}
