@@ -8,8 +8,8 @@ const HomePage = () => {
     const [error, setError] = useState('');
     const router = useRouter();
   
-    const isValidKey = (key: string) => {
-      return key.startsWith('0x') && key.length >= 8;
+    const isValidKey = (key: string): boolean => {
+      return /^[a-fA-F0-9]{64}$/.test(key);
     };
   
     const handlePrivateKeySubmit = () => {
@@ -17,7 +17,7 @@ const HomePage = () => {
         localStorage.setItem('authToken', privateKey);
         router.push('/dashboard');
       } else {
-        setError('Please enter a key starting with 0x and at least 8 characters long');
+        setError('Private key must contain only hexadecimal characters (0-9, a-f)."');
       }
     };
   
