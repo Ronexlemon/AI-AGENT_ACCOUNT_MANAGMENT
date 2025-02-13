@@ -1,17 +1,53 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
+import { fetchBalance } from "@/constant/api";
+import { getPublicKey } from "@/utils/account";
+import { format_ether } from "@/contract/contract";
+
+interface TokenOption {
+  name: string;
+  icon: string;
+  balance: string;
+  tokenAddress: string;
+}
 
 interface TokenDropdownProps {
   iconSrc: string;
   tokenName: string;
   balance: string;
-  options: { name: string; icon: string; balance: string }[];
+  options: TokenOption[];
 }
 
 export default function TokenDropdown({ iconSrc, tokenName, balance, options }: TokenDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedToken, setSelectedToken] = useState({ name: tokenName, icon: iconSrc, balance });
+  const [balances, setBalances] = useState<string>("0");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const privateKey = localStorage.getItem("authToken");
+  const userAddress = privateKey ? getPublicKey(privateKey) : "";
+  console.log("user address",userAddress)
+
+  // Fetch balances when dropdown opens
+  useEffect(() => {
+    if (isOpen) {
+      const fetchBalances = async () => {
+        
+        
+        for (const option of options) {
+          try {
+          const bal = await fetchBalance("11155111", option.tokenAddress, userAddress);
+          
+            setBalances( bal as string)
+          } catch (error) {
+            console.error(`Error fetching balance for ${option.name}:`, error);
+            //setBalances( "Error");
+          }
+        }
+
+      };
+      fetchBalances();
+    }
+  }, [isOpen, options, userAddress]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -40,7 +76,7 @@ export default function TokenDropdown({ iconSrc, tokenName, balance, options }: 
 
       {/* Balance */}
       <div className="text-right">
-        <p className="text-gray-400 text-sm ml-3"> Bal: {selectedToken.balance}</p>
+        <p className="text-gray-400 text-sm ml-3"> Bal: {balances}</p>
       </div>
 
       {/* Dropdown List */}
@@ -59,7 +95,7 @@ export default function TokenDropdown({ iconSrc, tokenName, balance, options }: 
                 <img src={option.icon} alt={option.name} className="w-5 h-5 rounded-full" />
               </div>
               <span>{option.name}</span>
-              <span className="ml-auto text-sm text-gray-400 ml-3"> Bal: {option.balance}</span>
+              <span className="ml-auto text-sm text-gray-400 ml-3">Bal: {balances }</span>
             </div>
           ))}
         </div>
