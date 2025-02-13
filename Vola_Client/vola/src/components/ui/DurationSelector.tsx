@@ -1,6 +1,10 @@
 import { ChevronDown } from "lucide-react";
 
-export default function DurationSelector() {
+interface Duration{
+  duration:number;
+  setDuration:(value:number)=> void
+}
+export default function DurationSelector({duration,setDuration}:Duration) {
   return (
     <div>
       <label className="text-[#A1A5C3] text-sm">Duration of Model:</label>
@@ -9,6 +13,7 @@ export default function DurationSelector() {
           type="number"
           defaultValue="1"
           className="w-16 bg-[#131725] p-2 rounded-lg border border-[#5E6AD2] text-white text-center"
+          onChange={(e) => setDuration(Number(e.target.value))}
         />
         <button className="flex items-center justify-between px-3 py-2 bg-[#131725] border border-[#5E6AD2] rounded-lg text-white w-full">
           Minute

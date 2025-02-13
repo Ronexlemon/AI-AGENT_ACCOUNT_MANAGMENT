@@ -2,8 +2,15 @@
 import { useState } from "react";
 import { ChevronDown, Settings2 } from "lucide-react";
 
-export default function VolatilityParams() {
-  const [volatility, setVolatility] = useState(5); // Default volatility %
+interface Volatility{
+  volatility:number,
+  setVolatility:(value:number)=>void
+ 
+
+}
+
+export default function VolatilityParams({volatility,setVolatility}:Volatility) {
+  
   const [isOpen, setIsOpen] = useState(false); // Track dropdown state
 
   const handleConfirm = () => {
