@@ -1,4 +1,5 @@
 import asyncio
+import json
 from typing import NewType
 from cowdao_cowpy.order_book.api import OrderBookApi, UID
 from cowdao_cowpy.common.chains import Chain
@@ -19,6 +20,13 @@ from eth_typing.evm import ChecksumAddress
 from abi import erc20_abi
 from swap import get_contract
 from account import get_user_Balance
+from cowdao_cowpy.subgraph.client import SubgraphClient
+from cowdao_cowpy.subgraph.deployments import build_subgraph_url
+url = build_subgraph_url() # Default network is Chain.SEPOLIA and env SubgraphEnvironment.PRODUCTION
+client = SubgraphClient(url=url)
+
+# Fetch the total supply of the CoW Protocol, defined in a query in cowdao_cowpy/subgraph/queries
+
 #provider = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider(sepoliaRPC))
 
 we3 = Web3(Web3.HTTPProvider(sepoliaRPC))
@@ -74,13 +82,17 @@ async def approveTx(amount,private_key,tokenAddress):
     return dict((receipt))
 
 async def fetch_orders():
-    uid = "0xff2e2e54d178997f173266817c1e9ed6fee1a1aae4b43971c53b543cffcc2969845c6f5599fbb25dbdd1b9b013daf85c03f3c63763e4bc4a"
+    
+    uid = "0x1c70c22b5e6772caa92db5c777da3c8baaa89fde165fef9fcab402588c193d0d65e28c9c4ef1a756d8df1c507b7a84efcf606fd467a9ecb4"
     print(uid)  # Replace with actual order UID
     orders = await order_book_api.get_order_by_uid(uid)  # Await the async call
     print(orders)
 
 
-
+async def fetch_orders_by_owner():
+     orders = await order_book_api.get_orders_by_owner(owner=to_checksum_address("0x65E28C9C4Ef1a756d8df1c507b7A84eFcF606fd4"))
+     print(orders)
+     
 
 # // Get quote
 #       const { quote } = await orderBookApi.getQuote(quoteRequest)
@@ -101,6 +113,7 @@ async def get_quote():
 # Run the async function
 #asyncio.run(get_quote())
 
+
 async def SwapTokens(private_key,amountt,sell_token,buy_token):
       localAccount = we3.eth.account.from_key(private_key)
       #amountt = Web3.to_wei(4, 'ether')
@@ -116,4 +129,4 @@ async def SwapTokens(private_key,amountt,sell_token,buy_token):
       swaptx = await swap_tokens(amount=str(amountt),account=localAccount,chain=Chain.SEPOLIA,sell_token=to_checksum_address(sell_token),buy_token=to_checksum_address(buy_token))  #0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14   ,DAI 0xB4F1737Af37711e9A5890D9510c9bB60e170CB0D
       print(swaptx)
       return receipt,swaptx
-#asyncio.run(SwapTokens())
+asyncio.run(fetch_orders_by_owner())

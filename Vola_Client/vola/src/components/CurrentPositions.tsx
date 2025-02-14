@@ -141,7 +141,7 @@ export default function CurrentPositions() {
                 </span>
                 <div className="flex items-center gap-1">
                   <img src="./assets/svg/eth-icon.svg" alt="ETH" className="w-4 h-4" />
-                  <span className="text-sm text-white">wETH</span>
+                  <span className="text-sm text-white">{predictions?.buy_token}</span>
                 </div>
               </div>
               {/* Token B Balance */}
@@ -151,7 +151,7 @@ export default function CurrentPositions() {
                 </span>
                 <div className="flex items-center gap-1">
                   <img src="./assets/svg/dai-icon.svg" alt="DAI" className="w-4 h-4" />
-                  <span className="text-sm text-white">DAI</span>
+                  <span className="text-sm text-white">{predictions?.sell_token}</span>
                 </div>
               </div>
             </div>

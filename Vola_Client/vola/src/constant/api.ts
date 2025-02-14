@@ -45,6 +45,8 @@ export interface PredictionData {
     token_pair: string;
     user_balance_TokenA: number;
     user_balance_TokenB: number;
+    sell_token:string;
+    buy_token:string;
   }
   
   export interface ApiResponse {

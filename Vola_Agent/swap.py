@@ -24,9 +24,9 @@ async def  getBlock():
 
 
 
-def getTokenName():
-   contract = get_contract()
-   return contract.functions.name().call()
+def getTokenName(tokenAddress):
+   contract = get_contract(tokenAddress=tokenAddress)
+   return contract.functions.symbol().call()
 
 
 
