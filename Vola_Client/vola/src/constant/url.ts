@@ -1,1 +1,1 @@
-export const VolaAgentURL = "http://localhost:5000/"
+export const VolaAgentURL = "http://127.0.0.1:5000/"

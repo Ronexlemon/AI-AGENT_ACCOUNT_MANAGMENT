@@ -13,6 +13,7 @@ import pickle
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from account import get_user_Balance,get_user_address
+from flask_cors import CORS
 
 app = Flask(__name__)
 running_flag = False
@@ -323,4 +324,4 @@ def get_address():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    CORS(app.run(debug=True))
