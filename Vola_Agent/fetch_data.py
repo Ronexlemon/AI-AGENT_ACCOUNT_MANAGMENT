@@ -9,7 +9,7 @@ HEADERS = {
 }
 
 
-def fetch_price_history(token_id ="aave",currency="usd", days=1):
+def fetch_price_history(token_id ="near",currency="usd", days=1):
     url = f"{COINGECKO_API}/coins/{token_id}/market_chart?vs_currency={currency}&days={days}"
     params = {"vs_currency": currency, "days": days}
     response = requests.get(url, headers=HEADERS, params=params)
